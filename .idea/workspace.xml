@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8511a9e-bb26-4896-ba1d-23f71e5b2074" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/Main.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +65,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Download Sources.executor": "Run",
     "Gradle.tic-tac-toe [:com.kodilla.Main.main()].executor": "Run",
+    "Gradle.tic-tac-toe [:com.kodilla.TicTacToe.main()].executor": "Run",
     "Gradle.tic-tac-toe [run].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -84,12 +86,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Gradle.tic-tac-toe [run]">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
       <envs>
         <env name="VM_OPTIONS" value="--module-path C:\JavaFX\javafx-sdk-21.0.8\lib --add-modules javafx.controls,javafx.fxml " />
       </envs>
-      <option name="MAIN_CLASS_NAME" value="com.kodilla.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.kodilla.TicTacToe" />
       <module name="tic-tac-toe.main" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -139,22 +141,11 @@
       <updated>1757764394240</updated>
       <workItem from="1757764395597" duration="2530000" />
       <workItem from="1757776400507" duration="1298000" />
-      <workItem from="1757777738728" duration="1283000" />
+      <workItem from="1757777738728" duration="6032000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/kodilla/Main.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
