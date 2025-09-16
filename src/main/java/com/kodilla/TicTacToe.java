@@ -1,5 +1,6 @@
 package com.kodilla;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,6 +11,10 @@ import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class TicTacToe extends Application {
     private Image gameboard = new Image("file:src/main/resources/Tic-Tac-Toe Board 300x300.png");
@@ -25,7 +30,6 @@ public class TicTacToe extends Application {
     private AudioClip winSound;
     private AudioClip drawSound;
 
-    // 🔹 Nowa logika gry
     private GameLogic gameLogic = new GameLogic();
 
     @Override
@@ -72,12 +76,11 @@ public class TicTacToe extends Application {
                 final int r = row;
                 final int c = col;
                 cell.setOnMouseClicked(e -> {
-                    if (symbol.getText().isEmpty()) {
+                    if (symbol.getText().isEmpty() && currentPlayer == 'X') {
                         try {
                             gameLogic.makeMove(r, c, currentPlayer);
                             symbol.setText(String.valueOf(currentPlayer));
-                            symbol.setStyle("-fx-font-size: 48px; -fx-text-fill: " +
-                                    (currentPlayer == 'X' ? "red" : "blue") + ";");
+                            symbol.setStyle("-fx-font-size: 48px; -fx-text-fill: red;");
 
                             playClickAnimation(symbol);
                             clickSound.play();
@@ -92,8 +95,11 @@ public class TicTacToe extends Application {
                                 drawSound.play();
                                 disableBoard();
                             } else {
-                                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-                                statusLabel.setText("Ruch gracza: " + currentPlayer);
+                                currentPlayer = 'O';
+                                statusLabel.setText("Ruch gracza: O");
+                                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                                pause.setOnFinished(ev -> makeComputerMove());
+                                pause.play();
                             }
                         } catch (IllegalArgumentException ex) {
                             statusLabel.setText("Nieprawidłowy ruch!");
@@ -104,6 +110,54 @@ public class TicTacToe extends Application {
                 grid.add(cell, col, row);
             }
         }
+    }
+
+    private void makeComputerMove() {
+        List<int[]> freeCells = new ArrayList<>();
+        char[][] board = gameLogic.getBoard();
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (board[row][col] == '\0') {
+                    freeCells.add(new int[]{row, col});
+                }
+            }
+        }
+
+        if (freeCells.isEmpty()) return;
+
+        Random rand = new Random();
+        int[] move = freeCells.get(rand.nextInt(freeCells.size()));
+
+        grid.getChildren().forEach(node -> {
+            Integer colIndex = GridPane.getColumnIndex(node);
+            Integer rowIndex = GridPane.getRowIndex(node);
+            if (rowIndex == move[0] && colIndex == move[1]) {
+                StackPane cell = (StackPane) node;
+                Label symbol = (Label) cell.getChildren().get(0);
+
+                try {
+                    gameLogic.makeMove(move[0], move[1], 'O');
+                    symbol.setText("O");
+                    symbol.setStyle("-fx-font-size: 48px; -fx-text-fill: blue;");
+                    playClickAnimation(symbol);
+                    clickSound.play();
+
+                    if (gameLogic.checkWin('O')) {
+                        statusLabel.setText("Komputer wygrał!");
+                        winSound.play();
+                        updateScore('O');
+                        disableBoard();
+                    } else if (gameLogic.isBoardFull()) {
+                        statusLabel.setText("Remis!");
+                        drawSound.play();
+                        disableBoard();
+                    } else {
+                        currentPlayer = 'X';
+                        statusLabel.setText("Ruch gracza: X");
+                    }
+                } catch (IllegalArgumentException ignored) {}
+            }
+        });
     }
 
     private void updateScore(char winner) {

@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8511a9e-bb26-4896-ba1d-23f71e5b2074" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameLogic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +71,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Download Sources.executor": "Run",
+    "Gradle.GameLogicSuiteTests.executor": "Run",
     "Gradle.tic-tac-toe [:com.kodilla.Main.main()].executor": "Run",
     "Gradle.tic-tac-toe [:com.kodilla.TicTacToe.main()].executor": "Run",
     "Gradle.tic-tac-toe [run].executor": "Run",
@@ -91,7 +92,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Gradle.GameLogicSuiteTests">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
       <envs>
         <env name="VM_OPTIONS" value="--module-path C:\JavaFX\javafx-sdk-21.0.8\lib --add-modules javafx.controls,javafx.fxml " />
@@ -176,7 +177,7 @@
       <updated>1757764394240</updated>
       <workItem from="1757764395597" duration="2530000" />
       <workItem from="1757776400507" duration="1298000" />
-      <workItem from="1757777738728" duration="8820000" />
+      <workItem from="1757777738728" duration="10227000" />
     </task>
     <servers />
   </component>
