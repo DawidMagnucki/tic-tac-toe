@@ -14,7 +14,6 @@ import javafx.util.Duration;
 public class TicTacToe extends Application {
     private Image gameboard = new Image("file:src/main/resources/Tic-Tac-Toe Board 300x300.png");
     private char currentPlayer = 'X';
-    private char[][] board = new char[3][3];
     private int scoreX = 0;
     private int scoreO = 0;
 
@@ -25,6 +24,9 @@ public class TicTacToe extends Application {
     private AudioClip clickSound;
     private AudioClip winSound;
     private AudioClip drawSound;
+
+    // 🔹 Nowa logika gry
+    private GameLogic gameLogic = new GameLogic();
 
     @Override
     public void start(Stage primaryStage) {
@@ -70,26 +72,31 @@ public class TicTacToe extends Application {
                 final int r = row;
                 final int c = col;
                 cell.setOnMouseClicked(e -> {
-                    if (symbol.getText().isEmpty() && board[r][c] == '\0') {
-                        symbol.setText(String.valueOf(currentPlayer));
-                        symbol.setStyle("-fx-font-size: 48px; -fx-text-fill: " + (currentPlayer == 'X' ? "red" : "blue") + ";");
-                        board[r][c] = currentPlayer;
+                    if (symbol.getText().isEmpty()) {
+                        try {
+                            gameLogic.makeMove(r, c, currentPlayer);
+                            symbol.setText(String.valueOf(currentPlayer));
+                            symbol.setStyle("-fx-font-size: 48px; -fx-text-fill: " +
+                                    (currentPlayer == 'X' ? "red" : "blue") + ";");
 
-                        playClickAnimation(symbol);
-                        clickSound.play();
+                            playClickAnimation(symbol);
+                            clickSound.play();
 
-                        if (checkWin(currentPlayer)) {
-                            statusLabel.setText("Gracz " + currentPlayer + " wygrał!");
-                            winSound.play();
-                            updateScore(currentPlayer);
-                            disableBoard();
-                        } else if (isBoardFull()) {
-                            statusLabel.setText("Remis!");
-                            drawSound.play();
-                            disableBoard();
-                        } else {
-                            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-                            statusLabel.setText("Ruch gracza: " + currentPlayer);
+                            if (gameLogic.checkWin(currentPlayer)) {
+                                statusLabel.setText("Gracz " + currentPlayer + " wygrał!");
+                                winSound.play();
+                                updateScore(currentPlayer);
+                                disableBoard();
+                            } else if (gameLogic.isBoardFull()) {
+                                statusLabel.setText("Remis!");
+                                drawSound.play();
+                                disableBoard();
+                            } else {
+                                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                                statusLabel.setText("Ruch gracza: " + currentPlayer);
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            statusLabel.setText("Nieprawidłowy ruch!");
                         }
                     }
                 });
@@ -106,7 +113,7 @@ public class TicTacToe extends Application {
     }
 
     private void resetGame() {
-        board = new char[3][3];
+        gameLogic.reset();
         currentPlayer = 'X';
         statusLabel.setText("Ruch gracza: X");
         createBoard();
@@ -114,25 +121,6 @@ public class TicTacToe extends Application {
 
     private void disableBoard() {
         grid.getChildren().forEach(node -> node.setDisable(true));
-    }
-
-    private boolean checkWin(char player) {
-        for (int i = 0; i < 3; i++) {
-            if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
-                    (board[0][i] == player && board[1][i] == player && board[2][i] == player))
-                return true;
-        }
-        return (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-                (board[0][2] == player && board[1][1] == player && board[2][0] == player);
-    }
-
-    private boolean isBoardFull() {
-        for (char[] row : board) {
-            for (char cell : row) {
-                if (cell == '\0') return false;
-            }
-        }
-        return true;
     }
 
     private void playClickAnimation(Label symbol) {
