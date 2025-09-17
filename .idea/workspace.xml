@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8511a9e-bb26-4896-ba1d-23f71e5b2074" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameBoard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameOverlay.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/SoundManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToeApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/UIFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToe.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Tic-Tac-Toe Board 300x300.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Tic-Tac-Toe Board 400x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Tic-Tac-Toe Board 600x600.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +75,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="32dxkSYYlop7jr50d0ucNXNKrDj" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -80,6 +94,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/david/IdeaProjects/kodilla/tic-tac-toe/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -89,15 +104,21 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.JavaFX",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\david\IdeaProjects\kodilla\tic-tac-toe\src\main\resources" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
       <envs>
         <env name="VM_OPTIONS" value="--module-path C:\JavaFX\javafx-sdk-21.0.8\lib --add-modules javafx.controls,javafx.fxml " />
       </envs>
-      <option name="MAIN_CLASS_NAME" value="com.kodilla.TicTacToe" />
+      <option name="MAIN_CLASS_NAME" value="com.kodilla.TicTacToeApp" />
       <module name="tic-tac-toe.main" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -177,11 +198,16 @@
       <updated>1757764394240</updated>
       <workItem from="1757764395597" duration="2530000" />
       <workItem from="1757776400507" duration="1298000" />
-      <workItem from="1757777738728" duration="10227000" />
+      <workItem from="1757777738728" duration="11483000" />
+      <workItem from="1758121509609" duration="11016000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
