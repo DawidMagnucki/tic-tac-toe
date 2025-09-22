@@ -5,9 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GameController {
     private final int boardSize;
@@ -16,16 +14,25 @@ public class GameController {
     private final GameBoard gameBoard;
     private final GameOverlay gameOverlay;
     private final SoundManager soundManager;
+    private final String difficulty;
+    private final BotPlayer botPlayer;
     private final Label statusLabel;
     private char currentPlayer = 'X';
     private int scoreX = 0;
     private int scoreO = 0;
+    private Runnable scoreUpdateCallback;
 
-    public GameController(int boardSize, int winLength, StackPane gridWrapper, Label statusLabel) {
+    public void setScoreUpdateCallback(Runnable callback) {
+        this.scoreUpdateCallback = callback;
+    }
+
+    public GameController(int boardSize, int winLength, String difficultyLevel, StackPane gridWrapper, Label statusLabel) {
         this.boardSize = boardSize;
         this.winLength = winLength;
+        this.difficulty = difficultyLevel;
         this.statusLabel = statusLabel;
         this.gameLogic = new GameLogic(boardSize, winLength);
+        this.botPlayer = new BotPlayer(difficulty, boardSize, winLength);
         this.soundManager = new SoundManager();
         this.gameBoard = new GameBoard(boardSize, 500 / boardSize, this::handlePlayerMove);
         this.gameOverlay = new GameOverlay(gridWrapper);
@@ -41,6 +48,7 @@ public class GameController {
         currentPlayer = 'X';
         gameOverlay.clearOverlay();
         statusLabel.setText("Ruch gracza: X");
+        gameBoard.resetBoard();
     }
 
     private void handlePlayerMove(int row, int col) {
@@ -57,6 +65,8 @@ public class GameController {
                 soundManager.playWin();
                 statusLabel.setText("Gracz X wygrał!");
                 scoreX++;
+                statusLabel.getScene().getWindow().requestFocus();
+                if (scoreUpdateCallback != null) scoreUpdateCallback.run();
                 gameBoard.disableBoard();
             } else if (gameLogic.isBoardFull()) {
                 statusLabel.setText("Remis!");
@@ -75,19 +85,11 @@ public class GameController {
     }
 
     private void makeComputerMove() {
-        List<int[]> freeCells = new ArrayList<>();
         char[][] board = gameLogic.getBoard();
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
-                if (board[row][col] == '\0') {
-                    freeCells.add(new int[]{row, col});
-                }
-            }
-        }
+        int[] move = botPlayer.chooseMove(board, 'O', 'X');
 
-        if (freeCells.isEmpty()) return;
+        if (move == null) return;
 
-        int[] move = freeCells.get(new Random().nextInt(freeCells.size()));
         int row = move[0];
         int col = move[1];
 
@@ -102,6 +104,8 @@ public class GameController {
                 soundManager.playWin();
                 statusLabel.setText("Komputer wygrał!");
                 scoreO++;
+                statusLabel.getScene().getWindow().requestFocus();
+                if (scoreUpdateCallback != null) scoreUpdateCallback.run();
                 gameBoard.disableBoard();
             } else if (gameLogic.isBoardFull()) {
                 statusLabel.setText("Remis!");
@@ -112,6 +116,14 @@ public class GameController {
                 statusLabel.setText("Ruch gracza: X");
             }
         } catch (IllegalArgumentException ignored) {}
+    }
+
+    public int getScoreX() {
+        return scoreX;
+    }
+
+    public int getScoreO() {
+        return scoreO;
     }
 
     public GameOverlay getGameOverlay() {

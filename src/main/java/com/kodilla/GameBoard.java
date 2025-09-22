@@ -66,7 +66,7 @@ public class GameBoard {
         StackPane cell = getCell(row, col);
         if (cell != null) {
             Label symbol = (Label) cell.getChildren().get(0);
-            symbol.setText(String.valueOf(player));
+            symbol.setText(player == '\0' ? "" : String.valueOf(player));
             String weight = bold ? "bold" : "normal";
             symbol.setStyle("-fx-font-size: " + (cellSize / 2) + "px; -fx-text-fill: " + color + "; -fx-font-weight: " + weight + ";");
             playClickAnimation(symbol);
@@ -84,5 +84,14 @@ public class GameBoard {
         st.setToX(1);
         st.setToY(1);
         st.play();
+    }
+
+    public void resetBoard() {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                setSymbol(row, col, '\0', "", false);
+                getCell(row, col).setDisable(false);
+            }
+        }
     }
 }

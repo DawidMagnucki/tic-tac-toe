@@ -18,6 +18,12 @@ public class GameLogic {
         this.board = new char[size][size];
     }
 
+    public void setBoard(char[][] newBoard) {
+        for (int r = 0; r < size; r++) {
+            System.arraycopy(newBoard[r], 0, board[r], 0, size);
+        }
+    }
+
     public boolean makeMove(int row, int col, char player) {
         if (board[row][col] != '\0') {
             throw new IllegalArgumentException("Pole jest już zajęte!");
