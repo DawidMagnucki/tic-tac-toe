@@ -65,6 +65,12 @@ public class UIFactory {
         return box;
     }
 
+    public static VBox createGameLayout(Label statusLabel, HBox scoreBox, StackPane boardView, HBox controlButtons) {
+        VBox layout = new VBox(20, statusLabel, scoreBox, boardView, controlButtons);
+        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+        return layout;
+    }
+
     public static void setScene(Stage stage, VBox layout, String title) {
         Scene scene = new Scene(layout, 600, 700);
         stage.setTitle(title);

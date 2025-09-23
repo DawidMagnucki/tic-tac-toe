@@ -14,6 +14,7 @@ public class GameBoard {
     private final int boardSize;
     private final int cellSize;
     private final BiConsumer<Integer, Integer> onPlayerMove;
+    private boolean disabled = false;
 
     public GameBoard(int boardSize, int cellSize, BiConsumer<Integer, Integer> onPlayerMove) {
         this.boardSize = boardSize;
@@ -86,6 +87,10 @@ public class GameBoard {
         st.play();
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
     public void resetBoard() {
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
@@ -93,5 +98,27 @@ public class GameBoard {
                 getCell(row, col).setDisable(false);
             }
         }
+        disabled = false;
     }
+
+    public char[][] getGridState() {
+        char[][] state = new char[boardSize][boardSize];
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                Label symbol = (Label) getCell(row, col).getChildren().get(0);
+                state[row][col] = symbol.getText().isEmpty() ? '\0' : symbol.getText().charAt(0);
+            }
+        }
+        return state;
+    }
+
+    public void setGridState(char[][] state) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                char value = state[row][col];
+                setSymbol(row, col, value, value == 'X' ? "red" : "blue", boardSize >= 10);
+            }
+        }
+    }
+
 }

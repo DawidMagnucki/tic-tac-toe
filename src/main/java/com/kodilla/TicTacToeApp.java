@@ -9,6 +9,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -18,15 +20,11 @@ public class TicTacToeApp extends Application {
     private int winLength;
     private GameController gameController;
     private String difficultyLevel = "Normalny";
-    private BotPlayer botPlayer;
     private String playerXName = "";
     private String playerOName = "";
     private boolean botEnabled = false;
     private Label scoreXLabel;
     private Label scoreOLabel;
-
-
-
 
     @Override
     public void start(Stage primaryStage) {
@@ -43,13 +41,64 @@ public class TicTacToeApp extends Application {
         Button exitButton = UIFactory.createMenuButton("Wyjście");
 
         newGameButton.setOnAction(e -> showGameModeMenu());
-        loadGameButton.setOnAction(e -> {/* opcjonalnie */});
+        loadGameButton.setOnAction(e -> {
+            try {
+                File file = new File("saved_game.dat");
+                GameState state = GameStateManager.loadGame(file);
+                restoreGame(state);
+            } catch (Exception ex) {
+                Label error = UIFactory.createStatusLabel("Nie udało się wczytać gry.");
+                VBox layout = new VBox(20, error, UIFactory.createButtonBox(UIFactory.createMenuButton("Powrót")));
+                layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+                UIFactory.setScene(mainStage, layout, "Błąd");
+            }
+        });
+
         rankingButton.setOnAction(e -> showRankingWindow());
         exitButton.setOnAction(e -> mainStage.close());
 
         VBox layout = UIFactory.createMenuLayout(title, newGameButton, loadGameButton, rankingButton, exitButton);
         UIFactory.setScene(mainStage, layout, "Tic-Tac-Toe");
     }
+
+    private void restoreGame(GameState state) {
+        this.boardSize = state.getBoardSize();
+        this.winLength = state.getWinLength();
+        this.botEnabled = state.isBotEnabled();
+        this.difficultyLevel = state.getDifficultyLevel();
+        this.playerXName = state.getPlayerXName();
+        this.playerOName = state.getPlayerOName();
+
+        Label statusLabel = UIFactory.createStatusLabel("Ruch gracza: " + (state.getCurrentPlayer() == 'X' ? playerXName : playerOName));
+        scoreXLabel = UIFactory.createScoreLabel(playerXName, state.getScoreX(), "red");
+        scoreOLabel = UIFactory.createScoreLabel(playerOName, state.getScoreO(), "blue");
+
+        HBox scoreBox = UIFactory.createScoreBox(scoreXLabel, scoreOLabel);
+        Button resetButton = UIFactory.createControlButton("Restart");
+        Button backButton = UIFactory.createControlButton("Powrót");
+        Button saveButton = UIFactory.createControlButton("Zapisz");
+
+        StackPane gridWrapper = new StackPane();
+        gameController = new GameController(boardSize, winLength, botEnabled, difficultyLevel, playerXName, playerOName, gridWrapper, statusLabel, scoreXLabel, scoreOLabel);
+        gameController.setScoreUpdateCallback(gameController::updateScoreLabels);
+        gameController.getGameBoard().setGridState(state.getBoard());
+        gameController.setCurrentPlayer(state.getCurrentPlayer());
+
+        resetButton.setOnAction(e -> gameController.resetGame());
+        backButton.setOnAction(e -> showStartMenu());
+        saveButton.setOnAction(e -> {
+            try {
+                GameStateManager.saveGame(state, new File("saved_game.dat"));
+                statusLabel.setText("Gra została zapisana.");
+            } catch (IOException ex) {
+                statusLabel.setText("Błąd zapisu gry.");
+            }
+        });
+
+        VBox layout = UIFactory.createGameLayout(statusLabel, scoreBox, gameController.getFullBoardView(), UIFactory.createButtonBox(resetButton, saveButton, backButton));
+        UIFactory.setScene(mainStage, layout, "Tic-Tac-Toe");
+    }
+
     private void showGameModeMenu() {
         Label title = UIFactory.createTitle("Wybierz tryb gry:");
         Button pvpButton = UIFactory.createMenuButton("Gra PvP");
@@ -72,6 +121,7 @@ public class TicTacToeApp extends Application {
         VBox layout = UIFactory.createMenuLayout(title, pvpButton, pcButton, backButton);
         UIFactory.setScene(mainStage, layout, "Tryb gry");
     }
+
     private void showDifficultySelectionBeforeName() {
         Label title = UIFactory.createTitle("Wybierz poziom trudności:");
         Button easyButton = UIFactory.createMenuButton("Łatwy");
@@ -154,6 +204,7 @@ public class TicTacToeApp extends Application {
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
         UIFactory.setScene(mainStage, layout, "Nazwa gracza");
     }
+
     private void showVariantMenu() {
         Label title = UIFactory.createTitle("Wybierz wariant gry:");
         Button classicButton = UIFactory.createMenuButton("Gra 3x3");
@@ -177,34 +228,6 @@ public class TicTacToeApp extends Application {
         VBox layout = UIFactory.createMenuLayout(title, classicButton, extendedButton, backButton);
         UIFactory.setScene(mainStage, layout, "Wariant gry");
     }
-
-
-//    private void showStartMenu() {
-//        Label title = UIFactory.createTitle("Wybierz wariant gry:");
-//        Button classicButton = UIFactory.createMenuButton("Klasyczna 3x3");
-//        Button extendedButton = UIFactory.createMenuButton("Do pięciu 10x10");
-//        Button rankingButton = UIFactory.createMenuButton("Statystyki");
-//        Button exitButton = UIFactory.createMenuButton("Wyjście");
-//
-//        classicButton.setOnAction(e -> {
-//            boardSize = 3;
-//            winLength = 3;
-//            showDifficultyMenu();
-//        });
-//
-//        extendedButton.setOnAction(e -> {
-//            boardSize = 10;
-//            winLength = 5;
-//            showDifficultyMenu();
-//        });
-//
-//        exitButton.setOnAction(e -> mainStage.close());
-//
-//        rankingButton.setOnAction(e -> showRankingWindow());
-//
-//        VBox menuLayout = UIFactory.createMenuLayout(title, classicButton, extendedButton, rankingButton, exitButton);
-//        UIFactory.setScene(mainStage, menuLayout, "Tic-Tac-Toe");
-//    }
 
     private void showDifficultyMenu() {
         Label title = UIFactory.createTitle("Wybierz poziom trudności:");
@@ -293,45 +316,49 @@ public class TicTacToeApp extends Application {
 
 
     private void launchGame() {
-        Label statusLabel = UIFactory.createStatusLabel("Ruch gracza: X");
-        scoreXLabel = UIFactory.createScoreLabel("X", 0, "red");
-        scoreOLabel = UIFactory.createScoreLabel("O", 0, "blue");
+        Label statusLabel = UIFactory.createStatusLabel("Ruch gracza: " + playerXName);
+        scoreXLabel = UIFactory.createScoreLabel(playerXName, 0, "red");
+        scoreOLabel = UIFactory.createScoreLabel(playerOName, 0, "blue");
 
         HBox scoreBox = UIFactory.createScoreBox(scoreXLabel, scoreOLabel);
+        Button saveButton = UIFactory.createControlButton("Zapisz");
         Button resetButton = UIFactory.createControlButton("Restart");
         Button backButton = UIFactory.createControlButton("Powrót");
 
         StackPane gridWrapper = new StackPane();
-        if (botEnabled) {
-            gameController = new GameController(boardSize, winLength, true, difficultyLevel, playerXName, playerOName, gridWrapper, statusLabel);
-        } else {
-            gameController = new GameController(boardSize, winLength, false, "PvP", playerXName, playerOName, gridWrapper, statusLabel);
-        }
-        gameController.setScoreUpdateCallback(this::updateScoreLabels);
-        BotPlayer botPlayer = new BotPlayer(difficultyLevel, boardSize, winLength);
+        gameController = new GameController(boardSize, winLength, botEnabled, difficultyLevel, playerXName, playerOName, gridWrapper, statusLabel, scoreXLabel, scoreOLabel);
+        gameController.setScoreUpdateCallback(gameController::updateScoreLabels);
 
-        resetButton.setOnAction(e -> {
-            gameController.resetGame();
-//            scoreX.setText("Gracz X: 0");
-//            scoreO.setText("Gracz O: 0");
+        saveButton.setOnAction(e -> {
+            try {
+                File file = new File("saved_game.dat");
+                GameState state = new GameState(
+                        gameController.getGameBoard().getGridState(),
+                        gameController.getCurrentPlayer(),
+                        gameController.getScoreX(),
+                        gameController.getScoreO(),
+                        playerXName,
+                        playerOName,
+                        botEnabled,
+                        difficultyLevel,
+                        boardSize,
+                        winLength
+                );
+                GameStateManager.saveGame(state, file);
+                statusLabel.setText("Gra została zapisana.");
+            } catch (IOException ex) {
+                statusLabel.setText("Błąd zapisu gry.");
+            }
         });
-
+        resetButton.setOnAction(e -> gameController.resetGame());
         backButton.setOnAction(e -> showStartMenu());
 
-        VBox layout = new VBox(20,
+        VBox layout = UIFactory.createGameLayout(
                 statusLabel,
                 scoreBox,
                 gameController.getFullBoardView(),
-                UIFactory.createButtonBox(resetButton, backButton)
-        );
-        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-
+                UIFactory.createButtonBox(resetButton, saveButton, backButton));
         UIFactory.setScene(mainStage, layout, "Tic-Tac-Toe");
-    }
-
-    private void updateScoreLabels() {
-        scoreXLabel.setText("Gracz X: " + gameController.getScoreX());
-        scoreOLabel.setText("Gracz O: " + gameController.getScoreO());
     }
 
 

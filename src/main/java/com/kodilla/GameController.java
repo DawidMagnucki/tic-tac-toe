@@ -19,65 +19,79 @@ public class GameController {
     private final BotPlayer botPlayer;
     private final boolean botEnabled;
     private final Label statusLabel;
+    private final Label scoreXLabel;
+    private final Label scoreOLabel;
+    private final String playerXName;
+    private final String playerOName;
     private char currentPlayer = 'X';
     private int scoreX = 0;
     private int scoreO = 0;
     private Runnable scoreUpdateCallback;
-    private final String playerXName;
-    private final String playerOName;
+
+    public GameController(int boardSize, int winLength, boolean botEnabled, String difficultyLevel,
+                          String playerXName, String playerOName, StackPane gridWrapper,
+                          Label statusLabel, Label scoreXLabel, Label scoreOLabel) {
+        this.boardSize = boardSize;
+        this.winLength = winLength;
+        this.botEnabled = botEnabled;
+        this.difficultyLevel = difficultyLevel != null ? difficultyLevel : "PvP";
+        this.playerXName = playerXName;
+        this.playerOName = playerOName;
+        this.statusLabel = statusLabel;
+        this.scoreXLabel = scoreXLabel;
+        this.scoreOLabel = scoreOLabel;
+        this.gameLogic = new GameLogic(boardSize, winLength);
+        this.botPlayer = botEnabled ? new BotPlayer(this.difficultyLevel, boardSize, winLength) : null;
+        this.soundManager = new SoundManager();
+        this.gameBoard = new GameBoard(boardSize, 500 / boardSize, this::handlePlayerMove);
+        this.gameOverlay = new GameOverlay(gridWrapper);
+        gridWrapper.getChildren().add(gameOverlay.getOverlay());
+    }
 
     public void setScoreUpdateCallback(Runnable callback) {
         this.scoreUpdateCallback = callback;
     }
 
-    // Konstruktor dla trybu PvP
-    public GameController(int boardSize, int winLength, boolean botEnabled, String playerXName, String playerOName, StackPane gridWrapper, Label statusLabel) {
-        this.boardSize = boardSize;
-        this.winLength = winLength;
-        this.botEnabled = botEnabled;
-        this.playerXName = playerXName;
-        this.playerOName = playerOName;
-        this.statusLabel = statusLabel;
-        this.difficultyLevel = "PvP"; // domyślna wartość
-        this.gameLogic = new GameLogic(boardSize, winLength);
-        this.botPlayer = botEnabled ? new BotPlayer("Normalny", boardSize, winLength) : null;
-        this.soundManager = new SoundManager();
-        this.gameBoard = new GameBoard(boardSize, 500 / boardSize, this::handlePlayerMove);
-        this.gameOverlay = new GameOverlay(gridWrapper);
-        gridWrapper.getChildren().add(gameOverlay.getOverlay());
-    }
-
-    // Konstruktor dla trybu vs PC
-    public GameController(int boardSize, int winLength, boolean botEnabled, String difficultyLevel, String playerXName, String playerOName, StackPane gridWrapper, Label statusLabel) {
-        this.boardSize = boardSize;
-        this.winLength = winLength;
-        this.botEnabled = botEnabled;
-        this.difficultyLevel = difficultyLevel;
-        this.playerXName = playerXName;
-        this.playerOName = playerOName;
-        this.statusLabel = statusLabel;
-        this.gameLogic = new GameLogic(boardSize, winLength);
-        this.botPlayer = new BotPlayer(difficultyLevel, boardSize, winLength);
-        this.soundManager = new SoundManager();
-        this.gameBoard = new GameBoard(boardSize, 500 / boardSize, this::handlePlayerMove);
-        this.gameOverlay = new GameOverlay(gridWrapper);
-        gridWrapper.getChildren().add(gameOverlay.getOverlay());
+    private String getCurrentPlayerName() {
+        return currentPlayer == 'X' ? playerXName : playerOName;
     }
 
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
+    public GameOverlay getGameOverlay() {
+        return gameOverlay;
+    }
+
+    public StackPane getFullBoardView() {
+        return new StackPane(gameBoard.getGrid(), gameOverlay.getOverlay());
+    }
+
+    public int getScoreX() {
+        return scoreX;
+    }
+
+    public int getScoreO() {
+        return scoreO;
+    }
+
     public void resetGame() {
         gameLogic.reset();
         currentPlayer = 'X';
         gameOverlay.clearOverlay();
-        statusLabel.setText("Ruch gracza: X");
+        statusLabel.setText("Ruch gracza: " + getCurrentPlayerName());
         gameBoard.resetBoard();
+        scoreXLabel.setText(playerXName + ": " + scoreX);
+        scoreOLabel.setText(playerOName + ": " + scoreO);
+    }
+
+    private boolean isGameOver() {
+        return gameBoard.isDisabled();
     }
 
     private void handlePlayerMove(int row, int col) {
-        if (!botEnabled && currentPlayer != 'X') return;
+        if (isGameOver()) return;
 
         try {
             gameLogic.makeMove(row, col, currentPlayer);
@@ -88,14 +102,12 @@ public class GameController {
                 List<int[]> winLine = gameLogic.getWinningLine(currentPlayer);
                 gameOverlay.drawWinningLine(winLine, gameBoard);
                 soundManager.playWin();
-                statusLabel.setText("Gracz " + currentPlayer + " wygrał!");
+                statusLabel.setText("Gracz " + getCurrentPlayerName() + " wygrał!");
                 if (currentPlayer == 'X') scoreX++; else scoreO++;
-                statusLabel.getScene().getWindow().requestFocus();
+                scoreXLabel.setText(playerXName + ": " + scoreX);
+                scoreOLabel.setText(playerOName + ": " + scoreO);
                 RankingManager rankingManager = new RankingManager();
-                GameResult result = new GameResult(currentPlayer == 'X' ? playerXName : playerOName,
-                        scoreX + scoreO,
-                        currentPlayer == 'X' ? scoreX : scoreO,
-                        LocalDate.now());
+                GameResult result = new GameResult(getCurrentPlayerName(), scoreX + scoreO, currentPlayer == 'X' ? scoreX : scoreO, LocalDate.now());
                 rankingManager.saveResult(result);
                 if (scoreUpdateCallback != null) scoreUpdateCallback.run();
                 gameBoard.disableBoard();
@@ -104,9 +116,10 @@ public class GameController {
                 soundManager.playDraw();
                 gameBoard.disableBoard();
             } else {
-                currentPlayer = 'O';
-                statusLabel.setText("Ruch gracza: O");
-                if (botEnabled) {
+                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                statusLabel.setText("Ruch gracza: " + getCurrentPlayerName());
+
+                if (botEnabled && currentPlayer == 'O') {
                     PauseTransition pause = new PauseTransition(Duration.seconds(1));
                     pause.setOnFinished(e -> makeComputerMove());
                     pause.play();
@@ -137,8 +150,10 @@ public class GameController {
                 List<int[]> winLine = gameLogic.getWinningLine('O');
                 gameOverlay.drawWinningLine(winLine, gameBoard);
                 soundManager.playWin();
-                statusLabel.setText("Komputer wygrał!");
+                statusLabel.setText("Gracz " + getCurrentPlayerName() + " wygrał!");
                 scoreO++;
+                scoreXLabel.setText(playerXName + ": " + scoreX);
+                scoreOLabel.setText(playerOName + ": " + scoreO);
                 statusLabel.getScene().getWindow().requestFocus();
                 RankingManager rankingManager = new RankingManager();
                 GameResult result = new GameResult(playerOName, scoreX + scoreO, scoreO, LocalDate.now());
@@ -151,24 +166,24 @@ public class GameController {
                 gameBoard.disableBoard();
             } else {
                 currentPlayer = 'X';
-                statusLabel.setText("Ruch gracza: X");
+                statusLabel.setText("Ruch gracza: " + getCurrentPlayerName());
             }
         } catch (IllegalArgumentException ignored) {}
     }
 
-    public int getScoreX() {
-        return scoreX;
+    public void updateScoreLabels() {
+        scoreXLabel.setText(playerXName + ": " + scoreX);
+        scoreOLabel.setText(playerOName + ": " + scoreO);
     }
 
-    public int getScoreO() {
-        return scoreO;
+
+    public char getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public GameOverlay getGameOverlay() {
-        return gameOverlay;
+    public void setCurrentPlayer(char player) {
+        this.currentPlayer = player;
+        statusLabel.setText("Ruch gracza: " + getCurrentPlayerName());
     }
 
-    public StackPane getFullBoardView() {
-        return new StackPane(gameBoard.getGrid(), gameOverlay.getOverlay());
-    }
 }
