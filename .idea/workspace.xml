@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8511a9e-bb26-4896-ba1d-23f71e5b2074" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/BotPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/RankingManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/ranking.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameLogic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToeApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +195,8 @@
       <workItem from="1757777738728" duration="11483000" />
       <workItem from="1758121509609" duration="11341000" />
       <workItem from="1758262617490" duration="1071000" />
-      <workItem from="1758514897835" duration="4930000" />
+      <workItem from="1758514897835" duration="5569000" />
+      <workItem from="1758605939600" duration="4536000" />
     </task>
     <servers />
   </component>
