@@ -92,7 +92,6 @@ public class BotPlayer {
         return copy;
     }
 
-
     private int[] smartMove(char[][] board, char bot, char player) {
         GameLogic logic = new GameLogic(boardSize, winLength);
 

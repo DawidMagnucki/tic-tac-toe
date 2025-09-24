@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8511a9e-bb26-4896-ba1d-23f71e5b2074" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameStateManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ranking.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ranking.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/TicTacToeApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kodilla/UIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kodilla/UIFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saved_game.dat" beforeDir="false" afterPath="$PROJECT_DIR$/saved_game.dat" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +194,8 @@
       <workItem from="1758262617490" duration="1071000" />
       <workItem from="1758514897835" duration="5569000" />
       <workItem from="1758605939600" duration="4960000" />
-      <workItem from="1758645565584" duration="4112000" />
+      <workItem from="1758645565584" duration="4520000" />
+      <workItem from="1758694282736" duration="566000" />
     </task>
     <servers />
   </component>

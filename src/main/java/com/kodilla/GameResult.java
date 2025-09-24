@@ -37,7 +37,6 @@ public class GameResult {
         return date.format(formatter) + " - " + username + " - " + gamesPlayed + " - " + gamesWon;
     }
 
-
     public static GameResult fromFileString(String line) {
         String[] parts = line.split(" - ");
         LocalDate date = LocalDate.parse(parts[0], DateTimeFormatter.ofPattern("dd-MM-yy"));

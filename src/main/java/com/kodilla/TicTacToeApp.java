@@ -115,7 +115,6 @@ public class TicTacToeApp extends Application {
             showDifficultySelectionBeforeName();
         });
 
-
         backButton.setOnAction(e -> showStartMenu());
 
         VBox layout = UIFactory.createMenuLayout(title, pvpButton, pcButton, backButton);
@@ -314,7 +313,6 @@ public class TicTacToeApp extends Application {
         UIFactory.setScene(mainStage, layout, "Ranking");
     }
 
-
     private void launchGame() {
         Label statusLabel = UIFactory.createStatusLabel("Ruch gracza: " + playerXName);
         scoreXLabel = UIFactory.createScoreLabel(playerXName, 0, "red");
@@ -360,7 +358,6 @@ public class TicTacToeApp extends Application {
                 UIFactory.createButtonBox(resetButton, saveButton, backButton));
         UIFactory.setScene(mainStage, layout, "Tic-Tac-Toe");
     }
-
 
     public static void main(String[] args) {
         launch(args);

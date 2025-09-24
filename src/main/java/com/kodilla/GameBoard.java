@@ -1,6 +1,5 @@
 package com.kodilla;
 
-import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -120,5 +119,4 @@ public class GameBoard {
             }
         }
     }
-
 }

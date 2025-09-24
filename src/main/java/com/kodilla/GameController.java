@@ -103,7 +103,8 @@ public class GameController {
                 gameOverlay.drawWinningLine(winLine, gameBoard);
                 soundManager.playWin();
                 statusLabel.setText("Gracz " + getCurrentPlayerName() + " wygrał!");
-                if (currentPlayer == 'X') scoreX++; else scoreO++;
+                if (currentPlayer == 'X') scoreX++;
+                else scoreO++;
                 scoreXLabel.setText(playerXName + ": " + scoreX);
                 scoreOLabel.setText(playerOName + ": " + scoreO);
                 RankingManager rankingManager = new RankingManager();
@@ -168,7 +169,8 @@ public class GameController {
                 currentPlayer = 'X';
                 statusLabel.setText("Ruch gracza: " + getCurrentPlayerName());
             }
-        } catch (IllegalArgumentException ignored) {}
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
     public void updateScoreLabels() {
